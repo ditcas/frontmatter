@@ -1,17 +1,29 @@
-file = open("file.md","r")
+def frontmatter(filename) :
 
-text = file.read()
+    try :
+        handle = open(filename,"r")
+    except OSError as err : # Guardem la frase del tipus d'error a err
+        print("OS error: {0}".format(err)) #Mostrem el tipus d'error
+        raise SystemExit
 
-file = open("file.md","w")
+    text = handle.read()
 
-first = "---\n"
-line1 = "Text afegit a posteriori\n"
-end = "---\n\n"
+    try :
+        handle = open(filename,"w")
+    except OSError as err :
+        print("OS error: {0}".format(err))
+        raise SystemExit        
 
-file.write(first)
-file.write(line1)
-file.write(end)
+    first = "---\n"
+    line1 = "Text afegit a posteriori\n"
+    end = "---\n\n"
 
-file.write(text)
+    handle.write(first)
+    handle.write(line1)
+    handle.write(end)
 
-file.close()
+    handle.write(text)
+
+    return handle.close()
+
+frontmatter("file.md")
