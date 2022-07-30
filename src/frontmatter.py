@@ -1,4 +1,19 @@
 def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_after: int = 2) :
+    '''
+    Write into a file a frontmatter.
+
+    :param filename: file
+    :type filename: file
+    :param begin: the wrapper put at the beginning of the frontmatter
+    :type begin: str
+    :param end: the wrapper put at the end of the frontmatter
+    :type end: str
+    :param newlines_after: number of line breaks between frontmatter and text
+    :type newlines_after: int
+
+    :return: a file with a frontmatter
+    :rtype: file
+    '''
 
     try :
         handle = open(filename,"r") # Obre l'arxiu en mode lectura
