@@ -1,6 +1,6 @@
-def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_after: int = 2) :
+def frontmatter(filename: str, begin: str = "---", end: str = "---", newlines_after: int = 2, **kwargs) :
     '''
-    Write into a file a frontmatter.
+    Write a frontmatter at the beginning of a file.
 
     :param filename: file
     :type filename: file
@@ -22,6 +22,7 @@ def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_af
         raise SystemExit
 
     text = handle.read() # Guarda el text ja existent en l'arxiu
+    handle.close()
 
     try :
         handle = open(filename,"w") # Obre l'arxiu en mode escriptura sobreescrita 
@@ -29,8 +30,23 @@ def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_af
         print("OS error: {0}".format(err))
         raise SystemExit        
 
+
+    kwargs_sorted = sorted(kwargs.items(), key=lambda x: x[0]) #Ordena el diccionari alfabèticament per key i el transforma en llista de tuples.
+    data = ""
+    for tupla in kwargs_sorted:
+        key = tupla[0]
+        value = tupla[1]
+        if type(value)==str :
+            data = data + f"{key}: '{value}'" + "\n"
+        elif type(value)==bool:
+            value = str(value)
+            value = value.lower()
+            data = data + f"{key}: {value}" + "\n"
+        else :
+            value = str(value)
+            data = data + f"{key}: {value}" + "\n"
+
     begin_wrapper = f"{begin}\n" # Cadena de caràcters de l'inici
-    line1 = "Text afegit a posteriori\n" #Capçalera
     end_wrapper = f"{end}\n" # Cadena de caràcters del final
   
     after = "" # Genera cadena amb els salts de línea indicats
@@ -38,7 +54,7 @@ def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_af
         after = after + "\n"
 
     handle.write(begin_wrapper) # Reescrivim de nou l'arxiu
-    handle.write(line1)
+    handle.write(data)
     handle.write(end_wrapper)
     handle.write(after)
 
@@ -46,4 +62,9 @@ def frontmatter(filename: str, begin: str = "+++", end: str = "---", newlines_af
 
     return handle.close()
 
-frontmatter("file.md")
+
+
+filename = "file.md"
+data = {"videos" : ["iymN_CPNVwQ", "nHi3YWQAyB4"], "description": "Lorem ipsum", "difficulty" : 3, "fieldNumber" : 1, "hasExercises" : True, "hasRelated" : True, "hasVideos" : True, "language" : "es", "layout" : "layouts/topic.html", "name" : "Suma de matrices", "parentName" : "Operaciones con matrices", "permalink" : "/{{language}}/{{section}}/{{name | slug}}/", "readingTime" : 10, "related" : ["Producto de matrices", "Matriz transpuesta"], "section" : "temas", "sectionExercises" : "ejercicios", "syllabusSection" : "temario", "title" : "Suma de matrices"}
+
+frontmatter(filename, **data)
