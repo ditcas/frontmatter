@@ -31,16 +31,12 @@ def set_data(data) :
     '''
     Transform data from a dictionary type to an organized string.
 
-    :param data: dict.
+    :param data: frontmatter's data
     :type data: dictionary
 
     :return: a sorted string where data is printed according its type.
     :rtype: string
     '''
-
-    if not isinstance(data, dict) :
-        print("frontmatter's data type must be dictionary")
-        raise SystemExit
 
     data_sorted = sorted(data.items(), key=lambda x: x[0]) #Ordena el diccionari alfabèticament per key i el transforma en llista de tuples.
 
@@ -78,6 +74,10 @@ def frontmatter(filename: str, data: dict, begin: str = "---", end: str = "---",
     :return: a file with a frontmatter
     :rtype: file
     '''
+    
+    if not isinstance(data, dict) :
+        print("frontmatter's data type must be dictionary")
+        raise SystemExit
 
     try :
         handle = open(filename,"r") # Obre l'arxiu en mode lectura
@@ -108,12 +108,3 @@ def frontmatter(filename: str, data: dict, begin: str = "---", end: str = "---",
     handle.write(text)
 
     return handle.close()
-
-
-filename = "file.md"
-
-frontmatter_data = {"videos" : ["iymN_CPNVwQ", "nHi3YWQAyB4"], "description": "Lorem ipsum", "difficulty" : 3, "fieldNumber" : 1, "hasExercises" : True, "hasRelated" : True, "hasVideos" : True, "language" : "es", "layout" : "layouts/topic.html", "name" : "Suma de matrices", "parentName" : "Operaciones con matrices", "permalink" : "/{{language}}/{{section}}/{{name | slug}}/", "readingTime" : 10, "related" : ["Producto de matrices", "Matriz transpuesta"], "section" : "temas", "sectionExercises" : "ejercicios", "syllabusSection" : "temario", "title" : "Suma de matrices"}
-
-# frontmatter_data = ["videos", ["iymN_CPNVwQ", "nHi3YWQAyB4"], "description", "Lorem ipsum"]
-
-frontmatter(filename, frontmatter_data)
